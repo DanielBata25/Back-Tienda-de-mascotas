@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entity.DTOs.Base;
+using System;
 
-namespace Entity.DTO
+namespace Entity.DTOs.Mascota
 {
-    class MascotaDto
+    public class MascotaDto : BaseDTO
     {
+        public string Nombre { get; set; }
+        public string Especie { get; set; }
+        public string Raza { get; set; }
+        public DateTime FechaNacimiento { get; set; }
+        public string Genero { get; set; }
+        public string Notas { get; set; }
     }
 }

@@ -1,12 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entity.Model
 {
-    class Pago
+    [Table("Pago", Schema = "Tienda")]
+    public class Pago : BaseModel
     {
+        [ForeignKey("Venta")]
+        public int VentaId { get; set; }
+        public Venta Venta { get; set; }
+
+        public DateTime FechaPago { get; set; }
+        public decimal Monto { get; set; }
+        public string MetodoPago { get; set; }
+        public string EstadoPago { get; set; }
+        public string Referencia { get; set; }
     }
 }

@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entity.DTOs.Base;
+using System;
 
-namespace Entity.DTO
+namespace Entity.DTOs.Pivotes
 {
-    class MascotaClienteDto
+    public class MascotaClienteDto : BaseDTO
     {
+        public int MascotaId { get; set; }
+        public string MascotaNombre { get; set; }
+
+        public int ClienteId { get; set; }
+        public string ClienteNombre { get; set; }
+
+        public DateTime FechaRegistro { get; set; }
     }
 }

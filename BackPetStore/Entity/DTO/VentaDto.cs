@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entity.DTOs.Base;
+using System;
 
-namespace Entity.DTO
+namespace Entity.DTOs.Venta
 {
-    class VentaDto
+    public class VentaDto : BaseDTO
     {
+        public int ClienteId { get; set; }
+        public DateTime FechaVenta { get; set; }
+        public string Estado { get; set; }
+        public string Canal { get; set; }
+        public string Observaciones { get; set; }
     }
 }

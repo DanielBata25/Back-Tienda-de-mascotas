@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entity.DTOs.Base;
 
-namespace Entity.DTO
+namespace Entity.DTOs.Pivotes
 {
-    class VentaProductoDto
+    public class VentaProductoDto : BaseDTO
     {
+        public int VentaId { get; set; }
+        public int ProductoId { get; set; }
+
+        public int Cantidad { get; set; }
+        public decimal PrecioUnitario { get; set; }
     }
 }

@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entity.DTOs.Base;
+using System;
 
-namespace Entity.DTO
+namespace Entity.DTOs.Pago
 {
-    class PagoDto
+    public class PagoDto : BaseDTO
     {
+        public int VentaId { get; set; }
+        public DateTime FechaPago { get; set; }
+        public decimal Monto { get; set; }
+        public string MetodoPago { get; set; }
+        public string EstadoPago { get; set; }
+        public string Referencia { get; set; }
     }
 }

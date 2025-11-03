@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entity.DTOs.Base;
 
-namespace Entity.DTO
+namespace Entity.DTOs.Producto
 {
-    class ProductoDto
+    public class ProductoDto : BaseDTO
     {
+        public string Nombre { get; set; }
+        public string Categoria { get; set; }
+        public string Descripcion { get; set; }
+        public int Stock { get; set; }
+        public string Estado { get; set; }
     }
 }
