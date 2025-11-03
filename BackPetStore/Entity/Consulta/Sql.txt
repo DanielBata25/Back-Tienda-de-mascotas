@@ -1,0 +1,165 @@
+------------------------------------------------------------
+-- CREACIÓN DE LA BASE DE DATOS
+------------------------------------------------------------
+CREATE DATABASE TiendaMascotasDB;
+GO
+
+USE TiendaMascotasDB;
+GO
+
+------------------------------------------------------------
+-- CREACIÓN DEL ESQUEMA
+------------------------------------------------------------
+CREATE SCHEMA Tienda;
+GO
+
+------------------------------------------------------------
+-- TABLA: Cliente
+------------------------------------------------------------
+CREATE TABLE Tienda.Cliente (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre NVARCHAR(100) NOT NULL,
+    Apellido NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(150) NULL,
+    Telefono NVARCHAR(50) NULL,
+    Direccion NVARCHAR(200) NULL,
+    IsDeleted BIT NOT NULL DEFAULT(0)
+);
+GO
+
+------------------------------------------------------------
+-- TABLA: Mascota
+------------------------------------------------------------
+CREATE TABLE Tienda.Mascota (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre NVARCHAR(100) NOT NULL,
+    Especie NVARCHAR(100) NOT NULL,
+    Raza NVARCHAR(100) NULL,
+    FechaNacimiento DATETIME NOT NULL,
+    Genero NVARCHAR(20) NULL,
+    Notas NVARCHAR(300) NULL,
+    IsDeleted BIT NOT NULL DEFAULT(0)
+);
+GO
+
+------------------------------------------------------------
+-- TABLA: MascotaCliente (pivote)
+-- 🔹 Se puede eliminar si se borra el cliente o la mascota.
+------------------------------------------------------------
+CREATE TABLE Tienda.MascotaCliente (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    MascotaId INT NOT NULL,
+    MascotaNombre NVARCHAR(100) NOT NULL,
+    ClienteId INT NOT NULL,
+    ClienteNombre NVARCHAR(150) NOT NULL,
+    FechaRegistro DATETIME NOT NULL DEFAULT(GETUTCDATE()),
+    IsDeleted BIT NOT NULL DEFAULT(0),
+
+    CONSTRAINT FK_MascotaCliente_Mascota FOREIGN KEY (MascotaId)
+        REFERENCES Tienda.Mascota(Id) ON DELETE CASCADE,
+
+    CONSTRAINT FK_MascotaCliente_Cliente FOREIGN KEY (ClienteId)
+        REFERENCES Tienda.Cliente(Id) ON DELETE CASCADE
+);
+GO
+
+------------------------------------------------------------
+-- TABLA: Producto
+-- 🔹 No se borra en cascada porque mantiene historial de ventas.
+------------------------------------------------------------
+CREATE TABLE Tienda.Producto (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre NVARCHAR(150) NOT NULL,
+    Categoria NVARCHAR(100) NULL,
+    Descripcion NVARCHAR(300) NULL,
+    Stock INT NOT NULL DEFAULT(0),
+    Estado NVARCHAR(50) NOT NULL DEFAULT('Activo'),
+    IsDeleted BIT NOT NULL DEFAULT(0)
+);
+GO
+
+------------------------------------------------------------
+-- TABLA: Venta
+-- 🔹 No se borra automáticamente si se borra el cliente (historial).
+------------------------------------------------------------
+CREATE TABLE Tienda.Venta (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    ClienteId INT NOT NULL,
+    FechaVenta DATETIME NOT NULL DEFAULT(GETDATE()),
+    Estado NVARCHAR(50) NOT NULL DEFAULT('Pendiente'),
+    Canal NVARCHAR(100) NULL,
+    Observaciones NVARCHAR(300) NULL,
+    IsDeleted BIT NOT NULL DEFAULT(0),
+
+    CONSTRAINT FK_Venta_Cliente FOREIGN KEY (ClienteId)
+        REFERENCES Tienda.Cliente(Id) ON DELETE NO ACTION
+);
+GO
+
+------------------------------------------------------------
+-- TABLA: VentaProducto (pivote)
+-- 🔹 Si se borra una venta, se eliminan sus productos (CASCADE).
+-- 🔹 Si se borra un producto, no se elimina la venta (NO ACTION).
+------------------------------------------------------------
+CREATE TABLE Tienda.VentaProducto (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    VentaId INT NOT NULL,
+    ProductoId INT NOT NULL,
+    Cantidad INT NOT NULL DEFAULT(1),
+    PrecioUnitario DECIMAL(18,2) NOT NULL,
+    IsDeleted BIT NOT NULL DEFAULT(0),
+
+    CONSTRAINT FK_VentaProducto_Venta FOREIGN KEY (VentaId)
+        REFERENCES Tienda.Venta(Id) ON DELETE CASCADE,
+
+    CONSTRAINT FK_VentaProducto_Producto FOREIGN KEY (ProductoId)
+        REFERENCES Tienda.Producto(Id) ON DELETE NO ACTION
+);
+GO
+
+------------------------------------------------------------
+-- TABLA: Pago
+-- 🔹 Si se borra la venta, se borran sus pagos (CASCADE).
+------------------------------------------------------------
+CREATE TABLE Tienda.Pago (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    VentaId INT NOT NULL,
+    FechaPago DATETIME NOT NULL DEFAULT(GETDATE()),
+    Monto DECIMAL(18,2) NOT NULL,
+    MetodoPago NVARCHAR(100) NOT NULL,
+    EstadoPago NVARCHAR(50) NOT NULL DEFAULT('Pendiente'),
+    Referencia NVARCHAR(100) NULL,
+    IsDeleted BIT NOT NULL DEFAULT(0),
+
+    CONSTRAINT FK_Pago_Venta FOREIGN KEY (VentaId)
+        REFERENCES Tienda.Venta(Id) ON DELETE CASCADE
+);
+GO
+
+------------------------------------------------------------
+-- DATOS DE PRUEBA INICIALES
+------------------------------------------------------------
+INSERT INTO Tienda.Cliente (Nombre, Apellido, Email, Telefono, Direccion)
+VALUES 
+('Camilo', 'Charry', 'camilo.charry@example.com', '+573104567890', 'Neiva - Huila'),
+('Laura', 'Michel', 'laura.michel@example.com', '+573226789012', 'Pitalito - Huila');
+
+INSERT INTO Tienda.Mascota (Nombre, Especie, Raza, FechaNacimiento, Genero, Notas)
+VALUES 
+('Luna', 'Perro', 'Golden Retriever', '2021-03-15', 'Hembra', 'Paciente regular'),
+('Max', 'Gato', 'Persa', '2022-06-01', 'Macho', 'Adoptado hace 6 meses');
+
+INSERT INTO Tienda.Producto (Nombre, Categoria, Descripcion, Stock, Estado)
+VALUES
+('Concentrado Premium 25kg', 'Alimento', 'Bolsa de concentrado alta calidad', 50, 'Activo'),
+('Correa de cuero', 'Accesorios', 'Correa ajustable mediana', 30, 'Activo');
+
+INSERT INTO Tienda.Venta (ClienteId, Estado, Canal, Observaciones)
+VALUES (1, 'Completada', 'Tienda Física', 'Compra realizada con efectivo');
+
+INSERT INTO Tienda.VentaProducto (VentaId, ProductoId, Cantidad, PrecioUnitario)
+VALUES (1, 1, 2, 120000.00), (1, 2, 1, 45000.00);
+
+INSERT INTO Tienda.Pago (VentaId, Monto, MetodoPago, EstadoPago, Referencia)
+VALUES (1, 285000.00, 'Efectivo', 'Procesado', 'FAC-0001');
+GO
