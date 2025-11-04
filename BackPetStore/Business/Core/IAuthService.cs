@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entity.DTOs;
 
-namespace Business.Core
+namespace Business.Interfaces
 {
-    class IAuthService
+    public interface IAuthService
     {
+        Task<string?> AuthenticateAsync(LoginDto loginDto);
     }
 }

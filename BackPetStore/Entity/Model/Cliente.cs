@@ -12,7 +12,8 @@ namespace Entity.Model
         public string Telefono { get; set; }
         public string Direccion { get; set; }
 
-        // Relaciones
+        public string Password { get; set; }
+
         public List<Venta> Ventas { get; set; } = new List<Venta>();
         public List<MascotaCliente> Mascotas { get; set; } = new List<MascotaCliente>();
     }
