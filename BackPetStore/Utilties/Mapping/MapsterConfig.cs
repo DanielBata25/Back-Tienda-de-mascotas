@@ -1,4 +1,5 @@
-﻿using Entity.DTOs;
+﻿using Entity.DTO.Create;
+using Entity.DTOs;
 using Entity.Model;
 using Mapster;
 
@@ -32,8 +33,8 @@ namespace Utilities.Mapping
             TypeAdapterConfig<Pago, PagoDto>.NewConfig();
             TypeAdapterConfig<PagoDto, Pago>.NewConfig();
 
-            TypeAdapterConfig<MascotaCliente, MascotaClienteDto>.NewConfig();
-            TypeAdapterConfig<MascotaClienteDto, MascotaCliente>.NewConfig();
+            TypeAdapterConfig<MascotaCliente, MascotaClienteCreateDto>.NewConfig();
+            TypeAdapterConfig<MascotaClienteCreateDto, MascotaCliente>.NewConfig();
 
    
             TypeAdapterConfig<VentaProducto, VentaProductoDto>.NewConfig();

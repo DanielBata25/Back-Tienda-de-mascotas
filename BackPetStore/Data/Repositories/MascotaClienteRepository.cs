@@ -31,5 +31,14 @@ namespace Data.Repositories
                 .OrderByDescending(mc => mc.FechaRegistro)
                 .ToListAsync();
         }
+
+        public override async Task<IEnumerable<MascotaCliente>> GetAllAsync()
+        {
+            return await _context.MascotaClientes
+                .Include(mc => mc.Mascota)
+                .Include(mc => mc.Cliente)
+                .Where(mc => !mc.IsDeleted)
+                .ToListAsync();
+        }
     }
 }

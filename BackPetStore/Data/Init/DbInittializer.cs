@@ -86,9 +86,7 @@ namespace Data.Init
                 var mascotaCliente1 = new MascotaCliente
                 {
                     MascotaId = mascotas.First().Id,
-                    MascotaNombre = mascotas.First().Nombre, // 👈 agregado
                     ClienteId = clientes.First().Id,
-                    ClienteNombre = clientes.First().Nombre + " " + clientes.First().Apellido, // 👈 agregado
                     FechaRegistro = DateTime.Now,
                     IsDeleted = false
                 };
@@ -96,9 +94,7 @@ namespace Data.Init
                 var mascotaCliente2 = new MascotaCliente
                 {
                     MascotaId = mascotas.Last().Id,
-                    MascotaNombre = mascotas.Last().Nombre, // 👈 agregado
                     ClienteId = clientes.Last().Id,
-                    ClienteNombre = clientes.Last().Nombre + " " + clientes.Last().Apellido, // 👈 agregado
                     FechaRegistro = DateTime.Now,
                     IsDeleted = false
                 };
